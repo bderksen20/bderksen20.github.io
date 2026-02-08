@@ -1,4 +1,4 @@
-import './style.css';
+import './styles/style.css';
 import {
   Scene,
   WebGLRenderer,
@@ -9,6 +9,7 @@ import {
   Mesh,
   AmbientLight,
   DirectionalLight,
+  Color,
 } from 'three';
 
 // document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
@@ -19,13 +20,20 @@ import {
 //   </div> -->
 // `
 
+// == general =====================================================================
+document.fonts.ready.then(() => {
+  document.querySelector('nav a')?.classList.add('ready');  // fade in nav items
+});
+
+
+// == three stuff =================================================================
 const canvas = document.getElementById('three-canvas') as HTMLCanvasElement;
 if( !canvas )
   throw new Error('Could not find canvas for three.js rendering...');
 
 // scene + camera setup
 const scene = new Scene()
-//scene.background = new THREE.Color('black');
+scene.background = new Color('black');
 
 const aspect = canvas.clientWidth / canvas.clientHeight;
 var camera = new PerspectiveCamera( 75, aspect, 0.1, 100 );

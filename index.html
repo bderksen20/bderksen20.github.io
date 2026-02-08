@@ -2,6 +2,41 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <style> /* default style to mitigate pop-in */
+      body{ 
+        height: 90%;
+        margin-top: 10%;
+        background-color: #242424;
+      } 
+      nav {
+          position: fixed;
+          height: 64px;
+          width: 100%;
+          top: 0;
+          left: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #1a1a1a;
+      }
+      nav a{
+          color: whitesmoke;
+          text-decoration: none;
+          text-transform: uppercase;
+          font-size: normal;
+          font-weight: 800;
+          transform: scaleY(1.2);
+          letter-spacing: 0.4rem;
+          word-spacing: 1rem;
+          opacity: 0;
+      }
+      nav a.ready{
+        opacity: 1;
+        transition: opacity 200ms ease-out;
+      }
+    </style>
+    <!-- <link rel="stylesheet" href="/styles/default.css" /> -->
+    <link rel="preload" href="/fonts/ZenDots-Regular.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="icon" type="image/png" href="/ball.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>bderksen20.github.io</title>
@@ -11,7 +46,9 @@
   </nav>
   <body>
     <!-- <div id="app"></div> -->
-    <canvas id="three-canvas"></canvas>
+     <div class="canvasbox">
+        <canvas id="three-canvas"></canvas>
+     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
