@@ -33,10 +33,11 @@ nav a{
   color: whitesmoke;
   text-decoration: none;
   text-transform: uppercase;
-  font-size: normal;
+  font-size: 1rem;
   font-weight: 800;
   transform: scaleY(1.2);
   letter-spacing: 0.4rem;
+  margin-right: -0.4rem; /* counter letter spacing*/
   word-spacing: 1rem;
 }
 

@@ -10,6 +10,7 @@ import {
   AmbientLight,
   DirectionalLight,
   Color,
+  Vector3,
 } from 'three';
 
 // document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
@@ -40,10 +41,12 @@ var camera = new PerspectiveCamera( 75, aspect, 0.1, 100 );
 camera.position.set(0, 0, 30);
 
 // add drawables
-const texx = new TextureLoader().load('{{.Host}}/static/img/tex_sample_artifact.png');
-const geometry = new SphereGeometry( 15, 128, 64 );
+const texx = new TextureLoader().load('/tex_sample_artifact.png');
+//const geometry = new SphereGeometry( 15, 128, 64 );
+const sphereGeo = new SphereGeometry( 15, 256, 256 );
+
 const material = new MeshStandardMaterial( { color: 0xff0000 , metalness: 0.5, roughness: 0, map: texx} );
-var sphere = new Mesh( geometry, material );
+var sphere = new Mesh( sphereGeo, material );
 scene.add( sphere );
 
 // lighting
@@ -66,18 +69,45 @@ function render(){
   time += 1 / 2*Math.PI / 100;
   requestAnimationFrame( render );  
 
-  blobify();
-  sphere.rotation.y += 0.02;
+  blobify(time);
+  sphere.rotation.y += 0.003;
   //sphere.position.x = Math.cos(time) * 20;
 
   renderer.render(scene, camera);
 };
 
-function blobify(/*time*/){
-  var position = sphere.geometry.attributes.position.array;
-  for(let v = 0; v < position.length; v++){
-    position[v] += (Math.random() - 0.5) * 0.05;
+function blobify(time){
+  
+  const posAttrib = sphereGeo.getAttribute('position');
+  var vtx = new Vector3();
+  for( let i = 0; i < posAttrib.count; i++)
+  {
+    vtx.fromBufferAttribute(posAttrib, i);
+
+    var normal = vtx.clone().sub(sphere.position).normalize();
+    var scale = (Math.sin(time*0.2) * 0.1 * (Math.random() - 0.5));
+    var scale = 0;
+
+    var step = Math.sin(time*0.5);
+    if( step < 0 && false)
+    {
+      scale = -Math.random() * 0.01;
+    }
+    else
+    {
+      scale = Math.sin(time*0.2) * 0.1 * (Math.random() - 0.5);
+    }
+
+    vtx.add(normal.multiplyScalar(scale));
+
+    posAttrib.setXYZ(i, vtx.x, vtx.y, vtx.z);
   }
+  
+
+  // var position = sphere.geometry.attributes.position.array;
+  // for(let v = 0; v < position.length; v++){
+  //   position[v] += (Math.random() - 0.5) * 0.05;
+  // }
 
   sphere.geometry.attributes.position.needsUpdate = true;
   sphere.geometry.computeVertexNormals();
