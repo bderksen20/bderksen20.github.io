@@ -22,17 +22,21 @@
       nav a{
           color: whitesmoke;
           text-decoration: none;
-          text-transform: uppercase;
-          font-size: normal;
+          /* font-size: normal;
           font-weight: 800;
           transform: scaleY(1.2);
           letter-spacing: 0.4rem;
-          word-spacing: 1rem;
+          word-spacing: 1rem; */
           opacity: 0;
       }
-      nav a.ready{
+      #nav_title{
+        text-transform: uppercase;
+        transition: 
+          opacity 500ms ease-out,
+      }
+      nav a.visible{
         opacity: 1;
-        transition: opacity 200ms ease-out;
+        transition: opacity 300ms ease-out;
       }
     </style>
     <!-- <link rel="stylesheet" href="/styles/default.css" /> -->
@@ -42,7 +46,12 @@
     <title>bderksen20.github.io</title>
   </head>
   <nav id="topnav">
-      <a href="#index">Billy Derksen</a>
+      <a href="#index" id="nav_title"><span>Billy Derksen</span></a>
+      <div class="nav_links">
+        <a id="nav_about"><span>about</span></a>
+        <a id="nav_projects"><span>projects</span></a>
+        <a id="nav_contact"><span>contact</span></a>
+      </div>
   </nav>
   <body>
     <!-- <div id="app"></div> -->

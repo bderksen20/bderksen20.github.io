@@ -21,13 +21,35 @@ import {
 //   </div> -->
 // `
 
-// == general =====================================================================
-document.fonts.ready.then(() => {
-  document.querySelector('nav a')?.classList.add('ready');  // fade in nav items
-});
+// == general =================================================================================
+animateNav();
 
+function animateNav()
+{
+  // TODO: better way to do this (animation chain)!
+  document.fonts.ready.then(() => {
+    document.getElementById('nav_title')?.classList.add('visible');  // fade in nav title
+  });
 
-// == three stuff =================================================================
+  setTimeout(() => {
+    document.getElementById('nav_title')?.classList.add('slideanim'); // slide title left
+  }, 1000);
+
+  // nav link fadein
+  setTimeout(() => {
+    document.getElementById('nav_about')?.classList.add('visible');
+  }, 4000);
+
+  setTimeout(() => {
+    document.getElementById('nav_projects')?.classList.add('visible');
+  }, 4500);
+
+  setTimeout(() => {
+    document.getElementById('nav_contact')?.classList.add('visible');
+  }, 5000);
+}
+
+// == three stuff ==============================================================================
 const canvas = document.getElementById('three-canvas') as HTMLCanvasElement;
 if( !canvas )
   throw new Error('Could not find canvas for three.js rendering...');
@@ -42,7 +64,6 @@ camera.position.set(0, 0, 30);
 
 // add drawables
 const texx = new TextureLoader().load('/tex_sample_artifact.png');
-//const geometry = new SphereGeometry( 15, 128, 64 );
 const sphereGeo = new SphereGeometry( 15, 256, 256 );
 
 const material = new MeshStandardMaterial( { color: 0xff0000 , metalness: 0.5, roughness: 0, map: texx} );
@@ -63,7 +84,7 @@ renderer.shadowMapEnabled = true;
 
 var time = 0;
 window.addEventListener( 'resize', onWindowResize, false );
-render();
+//render();
 
 function render(){
   time += 1 / 2*Math.PI / 100;
@@ -76,7 +97,7 @@ function render(){
   renderer.render(scene, camera);
 };
 
-function blobify(time){
+function blobify(time: number){
   
   const posAttrib = sphereGeo.getAttribute('position');
   var vtx = new Vector3();
@@ -102,17 +123,11 @@ function blobify(time){
 
     posAttrib.setXYZ(i, vtx.x, vtx.y, vtx.z);
   }
-  
-
-  // var position = sphere.geometry.attributes.position.array;
-  // for(let v = 0; v < position.length; v++){
-  //   position[v] += (Math.random() - 0.5) * 0.05;
-  // }
 
   sphere.geometry.attributes.position.needsUpdate = true;
   sphere.geometry.computeVertexNormals();
-  sphere.geometry.computeBoundingBox();
-  sphere.geometry.computeBoundingSphere();
+  //sphere.geometry.computeBoundingBox();
+  //sphere.geometry.computeBoundingSphere();
 };
 
 function onWindowResize(){
