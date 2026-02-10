@@ -32,13 +32,6 @@ nav {
 nav a{
   color: whitesmoke;
   text-decoration: none;
-  /* text-transform: uppercase;
-  font-size: 1rem;
-  font-weight: 800;
-  transform: scaleY(1.2);
-  letter-spacing: 0.4rem;
-  margin-right: -0.4rem; 
-  word-spacing: 1rem; */
   opacity: 0;
 }
 
@@ -65,10 +58,17 @@ nav a.visible{
   display: inline-block;
 }
 
-#nav_title.slideanim{
-  /* -view width + half container width + canvas padding */
+#nav_title.animate{
+  /* 
+    transform: -view width + half container width + canvas padding 
+    transition-delay: immediate opacity fade, delay translate
+  */
   transform: translateX(calc(-49vw + 50% + 10px));
-  transition-delay: 0ms, 1000ms;  /* immediate opacity fade, delay translate */
+  transition-delay: 0ms, 1000ms;
+}
+
+#nav_title.lock{
+  transition: none; /* clear transition to lock in-place after anim */
 }
 
 .nav_links{

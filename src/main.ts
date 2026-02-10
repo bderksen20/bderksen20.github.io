@@ -26,23 +26,28 @@ animateNav();
 
 function animateNav()
 {
+  const navTitle = document.getElementById('nav_title');
+  navTitle?.addEventListener('transitionend', (e) => {
+    if( e.propertyName === 'transform') {
+      navTitle.classList.add('lock');
+    }
+  });
+
   document.fonts.ready.then(() => {
     document.getElementById('nav_title')?.classList.add('visible');  // fade in nav title
   });
 
   requestAnimationFrame(() => {
-    document.getElementById('nav_title')?.classList.add('slideanim'); // slide title left
+    navTitle?.classList.add('animate'); // slide title left
     
     // TODO: convert remaining anims to css driven [ transitions + transition-delay ]
-
-  
-  
   
   });
 
   // nav link fadein
   setTimeout(() => {
     document.getElementById('nav_about')?.classList.add('visible');
+    //document.getElementById('nav_title')?.classList.add('slideanim_complete');
   }, 4000);
 
   setTimeout(() => {
@@ -52,6 +57,8 @@ function animateNav()
   setTimeout(() => {
     document.getElementById('nav_contact')?.classList.add('visible');
   }, 5000);
+
+  
 }
 
 // == three stuff ==============================================================================
