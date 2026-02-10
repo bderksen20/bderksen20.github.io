@@ -20,20 +20,25 @@ import {
 //     </p>
 //   </div> -->
 // `
-
+  
 // == general =================================================================================
 animateNav();
 
 function animateNav()
 {
-  // TODO: better way to do this (animation chain)!
   document.fonts.ready.then(() => {
     document.getElementById('nav_title')?.classList.add('visible');  // fade in nav title
   });
 
-  setTimeout(() => {
+  requestAnimationFrame(() => {
     document.getElementById('nav_title')?.classList.add('slideanim'); // slide title left
-  }, 1000);
+    
+    // TODO: convert remaining anims to css driven [ transitions + transition-delay ]
+
+  
+  
+  
+  });
 
   // nav link fadein
   setTimeout(() => {
@@ -84,7 +89,7 @@ renderer.shadowMapEnabled = true;
 
 var time = 0;
 window.addEventListener( 'resize', onWindowResize, false );
-//render();
+render();
 
 function render(){
   time += 1 / 2*Math.PI / 100;

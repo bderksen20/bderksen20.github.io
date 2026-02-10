@@ -66,7 +66,9 @@ nav a.visible{
 }
 
 #nav_title.slideanim{
-  transform: translateX(calc(-48vw + 50%));
+  /* -view width + half container width + canvas padding */
+  transform: translateX(calc(-49vw + 50% + 10px));
+  transition-delay: 0ms, 1000ms;  /* immediate opacity fade, delay translate */
 }
 
 .nav_links{
@@ -82,10 +84,18 @@ nav a.visible{
   padding: 0.5rem 1rem;
   background-color: black;
   border-radius: 12px;
+  font-size: 1rem;
 
-  transition: opacity 500ms ease-out;
+  transition:
+    opacity 500ms ease-out,
+    color 200ms ease,
+    background-color 200ms ease;
 }
 
+.nav_links a:hover{
+  color: black;
+  background-color: whitesmoke;
+}
 
 body {
   margin: 0;
