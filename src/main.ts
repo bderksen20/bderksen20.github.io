@@ -6,6 +6,7 @@ import {
   TextureLoader,
   SphereGeometry,
   MeshStandardMaterial,
+  ShaderMaterial,
   Mesh,
   AmbientLight,
   DirectionalLight,
@@ -78,7 +79,23 @@ camera.position.set(0, 0, 30);
 const texx = new TextureLoader().load('/tex_sample_artifact.png');
 const sphereGeo = new SphereGeometry( 15, 256, 256 );
 
+// setup material / shader
 const material = new MeshStandardMaterial( { color: 0xff0000 , metalness: 0.5, roughness: 0, map: texx} );
+material.onBeforeCompile = (shader) => {   // this allow
+  shader.uniforms.uTime = { value: 0.0 };
+  shader.vertexShader = `uniform float uTime;\n` + shader.vertexShader;
+  shader.vertexShader = shader.vertexShader.replace(
+    `#include <begin_vertex>`,
+    `#include <begin_vertex>
+
+    // "transformed" is Three's internal vec3 for the vertex position
+    transformed.y += sin(transformed.x * 2.0 + uTime) * 2.0;
+    `
+  );
+
+  material.userData.shader = shader;
+}
+
 var sphere = new Mesh( sphereGeo, material );
 scene.add( sphere );
 
@@ -92,7 +109,6 @@ scene.add( directionalLight );
 // renderer
 var renderer = new WebGLRenderer({antialias:true, canvas: canvas, alpha: true});
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-renderer.shadowMapEnabled = true;
 
 var time = 0;
 window.addEventListener( 'resize', onWindowResize, false );
@@ -101,8 +117,11 @@ render();
 function render(){
   time += 1 / 2*Math.PI / 100;
   requestAnimationFrame( render );  
+  if (material.userData.shader) {
+    material.userData.shader.uniforms.uTime.value += 0.01;
+  }
 
-  blobify(time);
+  //blobify(time);
   sphere.rotation.y += 0.003;
   //sphere.position.x = Math.cos(time) * 20;
 
