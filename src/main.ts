@@ -1,27 +1,8 @@
 import './styles/style.css';
-import {
-  Scene,
-  WebGLRenderer,
-  PerspectiveCamera,
-  TextureLoader,
-  SphereGeometry,
-  MeshStandardMaterial,
-  ShaderMaterial,
-  Mesh,
-  AmbientLight,
-  DirectionalLight,
-  Color,
-  Vector3,
-} from 'three';
+import { GfxEngine } from './gfx.ts';
 
-// document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-//   <!-- <div>
-//     <p class="appcontent">
-//       Under construction
-//     </p>
-//   </div> -->
-// `
-  
+let gfxEngine: GfxEngine | null = null;
+
 // == general =================================================================================
 animateNav();
 
@@ -67,103 +48,11 @@ const canvas = document.getElementById('three-canvas') as HTMLCanvasElement;
 if( !canvas )
   throw new Error('Could not find canvas for three.js rendering...');
 
-// scene + camera setup
-const scene = new Scene()
-scene.background = new Color('black');
-
-const aspect = canvas.clientWidth / canvas.clientHeight;
-var camera = new PerspectiveCamera( 75, aspect, 0.1, 100 );
-camera.position.set(0, 0, 30);
-
-// add drawables
-const texx = new TextureLoader().load('/tex_sample_artifact.png');
-const sphereGeo = new SphereGeometry( 15, 256, 256 );
-
-// setup material / shader
-const material = new MeshStandardMaterial( { color: 0xff0000 , metalness: 0.5, roughness: 0, map: texx} );
-material.onBeforeCompile = (shader) => {   // this allow
-  shader.uniforms.uTime = { value: 0.0 };
-  shader.vertexShader = `uniform float uTime;\n` + shader.vertexShader;
-  shader.vertexShader = shader.vertexShader.replace(
-    `#include <begin_vertex>`,
-    `#include <begin_vertex>
-
-    // "transformed" is Three's internal vec3 for the vertex position
-    transformed.y += sin(transformed.x * 2.0 + uTime) * 2.0;
-    `
-  );
-
-  material.userData.shader = shader;
-}
-
-var sphere = new Mesh( sphereGeo, material );
-scene.add( sphere );
-
-// lighting
-const ambientLight = new AmbientLight( 0xcccccc, 0.4 );
-scene.add( ambientLight );
-const directionalLight = new DirectionalLight( 0xffffff, 1 );
-directionalLight.position.set(-30,30,30);
-scene.add( directionalLight );
-
-// renderer
-var renderer = new WebGLRenderer({antialias:true, canvas: canvas, alpha: true});
-renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
-var time = 0;
 window.addEventListener( 'resize', onWindowResize, false );
-render();
 
-function render(){
-  time += 1 / 2*Math.PI / 100;
-  requestAnimationFrame( render );  
-  if (material.userData.shader) {
-    material.userData.shader.uniforms.uTime.value += 0.01;
-  }
-
-  //blobify(time);
-  sphere.rotation.y += 0.003;
-  //sphere.position.x = Math.cos(time) * 20;
-
-  renderer.render(scene, camera);
-};
-
-function blobify(time: number){
-  
-  const posAttrib = sphereGeo.getAttribute('position');
-  var vtx = new Vector3();
-  for( let i = 0; i < posAttrib.count; i++)
-  {
-    vtx.fromBufferAttribute(posAttrib, i);
-
-    var normal = vtx.clone().sub(sphere.position).normalize();
-    var scale = (Math.sin(time*0.2) * 0.1 * (Math.random() - 0.5));
-    var scale = 0;
-
-    var step = Math.sin(time*0.5);
-    if( step < 0 && false)
-    {
-      scale = -Math.random() * 0.01;
-    }
-    else
-    {
-      scale = Math.sin(time*0.2) * 0.1 * (Math.random() - 0.5);
-    }
-
-    vtx.add(normal.multiplyScalar(scale));
-
-    posAttrib.setXYZ(i, vtx.x, vtx.y, vtx.z);
-  }
-
-  sphere.geometry.attributes.position.needsUpdate = true;
-  sphere.geometry.computeVertexNormals();
-  //sphere.geometry.computeBoundingBox();
-  //sphere.geometry.computeBoundingSphere();
-};
+gfxEngine = new GfxEngine(canvas);
+gfxEngine.run();
 
 function onWindowResize(){
-  camera.aspect = canvas.clientWidth / canvas.clientHeight
-  camera.updateProjectionMatrix();
-
-  renderer.setSize( window.innerWidth, window.innerHeight );
+  gfxEngine?.resize();
 };
