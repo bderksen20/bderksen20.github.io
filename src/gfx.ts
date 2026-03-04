@@ -31,6 +31,7 @@ export class GfxEngine{
         const texx = new TextureLoader().load('/tex_sample_artifact.png');
         const sphereGeo = new SphereGeometry( 15, 256, 256 );
 
+        // use three 'onBeforeCompile' shader injection to modify the existing MeshStandardMaterial vertex shader
         const material = new MeshStandardMaterial( { color: 0xff0000 , metalness: 0.5, roughness: 0, map: texx} );
         material.onBeforeCompile = (shader) => {
             shader.uniforms.uTime = { value: 0.0 };
@@ -39,8 +40,18 @@ export class GfxEngine{
                 `#include <begin_vertex>`,
                 `#include <begin_vertex>
 
+                //vec3 n = normal;
+                //float mul = sin( uTime * 2.0) * 3.0;
+                //transformed += n * fract(sin(transformed.x) * 43758.5453123) * mul;
+
                 // "transformed" is Three's internal vec3 for the vertex position
-                transformed.y += sin(transformed.x * 2.0 + uTime) * 2.0;
+                float mul = sin( uTime * 2.0) * 3.0;
+                transformed.y += sin(transformed.x * 2.0 + uTime) * mul;
+
+                vec3 newNormal = normal;
+                float dDisp_dx = cos(position.x + uTime) * 0.5;
+                newNormal.x -= dDisp_dx;
+                transformedNormal = normalize(newNormal);
                 `
             );
             material.userData.shader = shader;
@@ -49,10 +60,11 @@ export class GfxEngine{
         var sphere = new Mesh( sphereGeo, material );
         this.scene.add( sphere );
 
-        const ambientLight = new AmbientLight( 0xcccccc, 0.4 );
+        const ambientLight = new AmbientLight( 0xcccccc, 0.3 );
         this.scene.add( ambientLight );
-        const directionalLight = new DirectionalLight( 0xffffff, 1 );
+        const directionalLight = new DirectionalLight( 0xffffff, 1.5 );
         directionalLight.position.set(-30,30,30);
+
         this.scene.add( directionalLight );
 
         this.renderer = new WebGLRenderer({antialias:true, canvas: this.canvas, alpha: true});

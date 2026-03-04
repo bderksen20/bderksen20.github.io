@@ -108,6 +108,7 @@ body {
 }
 
 .canvasbox{
+  position: relative;
   margin-top: 64px; 
   box-sizing: border-box;
   padding: 10px;
@@ -117,8 +118,39 @@ body {
   display: flex;
 }
 
+.canvasbox canvas{
+  flex: 1;
+  display: block;
+  border-radius: 12px;
+  z-index: 0;
+}
+
+.canvasbox .overlay{
+  background: rgba(255,0,0,0.3);
+  /* opacity: 1; */
+
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.canvasbox .overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/*
 #three-canvas {
   flex: 1;
   display: block;
   border-radius: 12px;
 }
+*/

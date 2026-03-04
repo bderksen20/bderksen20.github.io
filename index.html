@@ -44,17 +44,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>bderksen20.github.io</title>
   </head>
-  <nav id="topnav">
+  <body>
+    <nav id="topnav">
       <a href="/" id="nav_title"><span>Billy Derksen</span></a>
       <div class="nav_links">
-        <a href="/about" id="nav_about" data-link><span>about</span></a>
+        <a href="#" id="nav_about" data-route="about"><span>about</span></a>
         <a id="nav_projects"><span>projects</span></a>
         <a id="nav_contact"><span>contact</span></a>
       </div>
-  </nav>
-  <body>
+    </nav>
     <!-- <div id="app"></div> -->
      <div class="canvasbox">
+        <div class="overlay" id="overlay"></div>
         <canvas id="three-canvas"></canvas>
      </div>
     <script type="module" src="/src/main.ts"></script>

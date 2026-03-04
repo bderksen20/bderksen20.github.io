@@ -1,5 +1,17 @@
 import './styles/style.css';
 import { GfxEngine } from './gfx.ts';
+import { navigate } from "./router.ts";
+
+document.querySelectorAll("[data-route]").forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const route = link.getAttribute("data-route") as any;
+    console.log("navigate called with route:", route);
+    navigate(route);
+  });
+});
+
+//navigate("about");
 
 let gfxEngine: GfxEngine | null = null;
 
