@@ -126,21 +126,26 @@ body {
 }
 
 .canvasbox .overlay{
-  background: rgba(255,0,0,0.3);
+  /* background: rgba(255,0,0,0.3); */
   /* opacity: 1; */
 
+  display: flex;
+
   position: absolute;
-  inset: 0;
   z-index: 1;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  inset: 20px;
+  padding: inherit;
+
+  justify-content: flex-start;
+  align-items: flex-start;
 
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
+
+.canvasbox .overlay h1 { margin: 0; }
 
 .canvasbox .overlay.visible {
   opacity: 1;

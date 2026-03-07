@@ -45,7 +45,7 @@ export class GfxEngine{
                 //transformed += n * fract(sin(transformed.x) * 43758.5453123) * mul;
 
                 // "transformed" is Three's internal vec3 for the vertex position
-                float mul = sin( uTime * 2.0) * 3.0;
+                float mul = sin( uTime * 0.5) * 3.0;
                 transformed.y += sin(transformed.x * 2.0 + uTime) * mul;
 
                 vec3 newNormal = normal;
