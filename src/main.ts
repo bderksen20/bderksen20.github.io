@@ -24,6 +24,7 @@ function animateNav()
   navTitle?.addEventListener('transitionend', (e) => {
     if( e.propertyName === 'transform') {
       navTitle.classList.add('lock');
+      document.querySelector('.nav_links')?.classList.add('animate');
     }
   });
 
@@ -33,24 +34,8 @@ function animateNav()
 
   requestAnimationFrame(() => {
     navTitle?.classList.add('animate'); // slide title left
-    
     // TODO: convert remaining anims to css driven [ transitions + transition-delay ]
-  
   });
-
-  // nav link fadein
-  setTimeout(() => {
-    document.getElementById('nav_about')?.classList.add('visible');
-    //document.getElementById('nav_title')?.classList.add('slideanim_complete');
-  }, 4000);
-
-  setTimeout(() => {
-    document.getElementById('nav_projects')?.classList.add('visible');
-  }, 4500);
-
-  setTimeout(() => {
-    document.getElementById('nav_contact')?.classList.add('visible');
-  }, 5000);
 
   
 }
