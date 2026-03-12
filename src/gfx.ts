@@ -87,12 +87,12 @@ export class GfxEngine{
         this.camera.aspect = this.canvas.parentElement.clientWidth / this.canvas.parentElement.clientHeight
         this.camera.updateProjectionMatrix();
 
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
         const rect = this.canvas.parentElement.getBoundingClientRect();
-        //const width = document.documentElement.clientWidth;
-        //const height = document.documentElement.clientHeight;
-        const width = rect.width;
+        const width = rect.width - scrollbarWidth;
         const height = rect.height;
-        
+
         this.renderer.setSize( width, height );
     }
 }
