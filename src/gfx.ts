@@ -84,9 +84,15 @@ export class GfxEngine{
     }
 
     resize(){
-        this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight
+        this.camera.aspect = this.canvas.parentElement.clientWidth / this.canvas.parentElement.clientHeight
         this.camera.updateProjectionMatrix();
 
-        this.renderer.setSize( window.innerWidth, window.innerHeight );
+        const rect = this.canvas.parentElement.getBoundingClientRect();
+        //const width = document.documentElement.clientWidth;
+        //const height = document.documentElement.clientHeight;
+        const width = rect.width;
+        const height = rect.height;
+        
+        this.renderer.setSize( width, height );
     }
 }

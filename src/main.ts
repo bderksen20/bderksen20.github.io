@@ -11,8 +11,6 @@ document.querySelectorAll("[data-route]").forEach(link => {
   });
 });
 
-//navigate("about");
-
 let gfxEngine: GfxEngine | null = null;
 
 // == general =================================================================================
@@ -34,10 +32,7 @@ function animateNav()
 
   requestAnimationFrame(() => {
     navTitle?.classList.add('animate'); // slide title left
-    // TODO: convert remaining anims to css driven [ transitions + transition-delay ]
   });
-
-  
 }
 
 // == three stuff ==============================================================================
