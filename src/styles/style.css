@@ -223,11 +223,3 @@ canvas{
   opacity: 1;
   pointer-events: auto;
 }
-
-/*
-#three-canvas {
-  flex: 1;
-  display: block;
-  border-radius: 12px;
-}
-*/
