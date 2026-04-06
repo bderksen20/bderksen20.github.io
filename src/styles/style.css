@@ -11,7 +11,7 @@
 
   box-sizing: border-box;
 
-  font-synthesis: none;
+  font-synthesis: style;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -24,6 +24,16 @@
   to {
     opacity: 1;
   }
+}
+
+h3{
+  margin-top: 0;
+  font-style: italic;
+}
+
+p {
+  font-style: normal;
+  font-size: 1rem;
 }
 
 nav {
@@ -139,6 +149,10 @@ nav a.visible{
 
 .nav_links a:nth-child(5) {
   --animation-index: 4;
+}
+
+.nav_links a:nth-child(6) {
+  --animation-index: 5;
 }
 
 .nav_links a:hover{

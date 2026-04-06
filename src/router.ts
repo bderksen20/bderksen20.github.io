@@ -1,8 +1,10 @@
 import { ViewAbout } from "./views/about";
+import { ViewWork } from "./views/work";
 
-type Route = "about";
+type Route = "about" | "work";
 const routes: Record<Route, () => HTMLElement> = {
-  about: ViewAbout
+  about: ViewAbout,
+  work: ViewWork
 };
 
 export function navigate(route: Route) {

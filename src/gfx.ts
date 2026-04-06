@@ -9,7 +9,12 @@ import {
   AmbientLight,
   DirectionalLight,
   Color,
+  MeshPhysicalMaterial,
+  PlaneGeometry,
+  MeshBasicMaterial,
 } from 'three';
+
+const USE_MESH_DEFORM_SHADER: boolean = false;
 
 export class GfxEngine{
     private canvas: HTMLCanvasElement;
@@ -29,36 +34,72 @@ export class GfxEngine{
         this.camera.position.set(0, 0, 30);
 
         const texx = new TextureLoader().load('/tex_sample_artifact.png');
-        const sphereGeo = new SphereGeometry( 15, 256, 256 );
+        const contentTex = new TextureLoader().load('/images/mw3-disciple.webp');
+
+        const contentQuadGeo = new PlaneGeometry(10,5);
+        const sphereGeo = new SphereGeometry( 10, 256, 256 );
+        const orbGeo = new SphereGeometry( 15, 256, 256 );
 
         // use three 'onBeforeCompile' shader injection to modify the existing MeshStandardMaterial vertex shader
-        const material = new MeshStandardMaterial( { color: 0xff0000 , metalness: 0.5, roughness: 0, map: texx} );
-        material.onBeforeCompile = (shader) => {
-            shader.uniforms.uTime = { value: 0.0 };
-            shader.vertexShader = `uniform float uTime;\n` + shader.vertexShader;
-            shader.vertexShader = shader.vertexShader.replace(
-                `#include <begin_vertex>`,
-                `#include <begin_vertex>
+        const material = new MeshStandardMaterial( 
+        { /*color: 0xff0000 ,*/ 
+            metalness: 0.5, 
+            roughness: 0.4, 
+            emissiveMap: texx,
+            emissive: 0xFFFFFF,
+            emissiveIntensity: 0.5,
+            map: texx,
+        } );
+        const glassMat = new MeshPhysicalMaterial( 
+            {
+                //  color: 0xFFFFFFF,
+                roughness: 0,
+                transmission: 1,
+                thickness: 9,
+                ior: 1.5,
+                //clearcoat: 1,
+                //clearcoatRoughness: 0.05,
+                //reflectivity: 1,
+                side: 2
+            } 
+        );
+        const contentMat = new MeshBasicMaterial({map: contentTex})
 
-                //vec3 n = normal;
-                //float mul = sin( uTime * 2.0) * 3.0;
-                //transformed += n * fract(sin(transformed.x) * 43758.5453123) * mul;
+        if( USE_MESH_DEFORM_SHADER )
+        {
+            material.onBeforeCompile = (shader) => {
+                shader.uniforms.uTime = { value: 0.0 };
+                shader.vertexShader = `uniform float uTime;\n` + shader.vertexShader;
+                shader.vertexShader = shader.vertexShader.replace(
+                    `#include <begin_vertex>`,
+                    `#include <begin_vertex>
 
-                // "transformed" is Three's internal vec3 for the vertex position
-                float mul = sin( uTime * 0.5) * 3.0;
-                transformed.y += sin(transformed.x * 2.0 + uTime) * mul;
+                    //vec3 n = normal;
+                    //float mul = sin( uTime * 2.0) * 3.0;
+                    //transformed += n * fract(sin(transformed.x) * 43758.5453123) * mul;
 
-                vec3 newNormal = normal;
-                float dDisp_dx = cos(position.x + uTime) * 0.5;
-                newNormal.x -= dDisp_dx;
-                transformedNormal = normalize(newNormal);
-                `
-            );
-            material.userData.shader = shader;
+                    // "transformed" is Three's internal vec3 for the vertex position
+                    float mul = sin( uTime * 0.5) * 3.0;
+                    transformed.y += sin(transformed.x * 2.0 + uTime) * mul;
+
+                    vec3 newNormal = normal;
+                    float dDisp_dx = cos(position.x + uTime) * 0.5;
+                    newNormal.x -= dDisp_dx;
+                    transformedNormal = normalize(newNormal);
+                    `
+                );
+                material.userData.shader = shader;
+            }
         }
 
         var sphere = new Mesh( sphereGeo, material );
+        var orb = new Mesh( orbGeo, glassMat );
+        var plane = new Mesh(contentQuadGeo, contentMat )
+        //plane.position.set(0,0,10);
+
         this.scene.add( sphere );
+        this.scene.add( orb );
+        this.scene.add( plane );
 
         const ambientLight = new AmbientLight( 0xcccccc, 0.3 );
         this.scene.add( ambientLight );
