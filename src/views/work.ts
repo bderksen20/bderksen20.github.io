@@ -4,7 +4,13 @@ export function ViewWork(): HTMLElement {
     <h1>Call of Duty: Black Ops 7<h1>
     <h3>Engine & Graphics Programmer - 1 yr<h3>
     <p>
+        Remastered the infamous millimeter scanner weapon optic, as featured in the Black Ops 7 multiplayer reveal trailer (see below!). Responsible for all in-game aspects of the optic, with the bulk of the system work falling under rendering / gameplay interactivity.
     </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/pGFYtZD53ZA?si=2j-UrU_C1STZ8y3P&amp;start=83" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <video width="560" height="315" controls autoplay loop muted>
+        <source src="/mms_vid.mp4" type="video/mp4">
+        Your browser does not support the video tag
+    </video>
 
     <h1>Call of Duty: Black Ops 6<h1>
     <h3>Engine & Graphics Programmer - 2 yrs<h3>
@@ -12,14 +18,14 @@ export function ViewWork(): HTMLElement {
         Delivered a camo/material system providing rendering and engine functionality to support a new type of in-game cosmetic.
     </p>
     <p>
-        Additionally contributed to a wide variety of engine, gfx, and tooling systems. A few high level examples include...
+        Additionally contributed to a wide variety of engine, gfx, and tooling systems. A few high-level examples include...
     </p>
     <ul>
         <li>[ postfx ] - implemented engine subsystems with respective gameplay interactivity and artist tooling</li>
         <li>[ tools ] - designed inter-application systems used to expedite artist workflows</li>
         <li>[ beam vfx ] - continued to maintain and support beam vfx systems, added new features</li>
         <li>[ laser + tracer vfx ] - improved weapon lasers and bullet tracer effects</li>
-        <li>[ gameplay ] - bespoke shaders for gamemode / gameplay mechanics ( e.g. prop hunt )</li>
+        <li>[ gameplay ] - bespoke shaders for game mode / gameplay mechanics ( e.g. prop hunt )</li>
     </ul>
 
     <h1>Call of Duty: Modern Warfare III<h1>
