@@ -2,16 +2,17 @@ import './styles/style.css';
 import { GfxEngine } from './gfx.ts';
 import { navigate } from "./router.ts";
 
+let gfxEngine: GfxEngine | null = null;
+
 document.querySelectorAll("[data-route]").forEach(link => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
     const route = link.getAttribute("data-route") as any;
     console.log("navigate called with route:", route);
+    gfxEngine?.animTrigger();
     navigate(route);
   });
 });
-
-let gfxEngine: GfxEngine | null = null;
 
 // == general =================================================================================
 animateNav();

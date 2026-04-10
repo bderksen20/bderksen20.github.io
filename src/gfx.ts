@@ -12,20 +12,31 @@ import {
   MeshPhysicalMaterial,
   PlaneGeometry,
   MeshBasicMaterial,
+  ACESFilmicToneMapping,
+  SRGBColorSpace,
+  Clock,
+  InterpolateSmooth,
 } from 'three';
+import { lerp } from 'three/src/math/MathUtils.js';
 
-const USE_MESH_DEFORM_SHADER: boolean = false;
+const USE_MESH_DEFORM_SHADER: boolean = true;
+const ANIM_DT_RCP = 1 / 2; // s
 
 export class GfxEngine{
     private canvas: HTMLCanvasElement;
     private scene!: Scene;
     private camera!: PerspectiveCamera;
     private renderer!: WebGLRenderer;
+    private clock!: Clock;
+
+    private state = 0;
+    private animStartTime = 0;
 
     constructor(canvas: HTMLCanvasElement) { this.canvas = canvas; }
 
     run()
     {
+        this.clock = new Clock();
         this.scene = new Scene();
         this.scene.background = new Color('black');
 
@@ -34,9 +45,10 @@ export class GfxEngine{
         this.camera.position.set(0, 0, 30);
 
         const texx = new TextureLoader().load('/tex_sample_artifact.png');
-        const contentTex = new TextureLoader().load('/images/mw3-disciple.webp');
+        texx.colorSpace = SRGBColorSpace;
+        //const contentTex = new TextureLoader().load('/images/mw3-disciple.webp');
 
-        const contentQuadGeo = new PlaneGeometry(10,5);
+        //const contentQuadGeo = new PlaneGeometry(10,5);
         const sphereGeo = new SphereGeometry( 10, 256, 256 );
         const orbGeo = new SphereGeometry( 15, 256, 256 );
 
@@ -45,9 +57,9 @@ export class GfxEngine{
         { /*color: 0xff0000 ,*/ 
             metalness: 0.5, 
             roughness: 0.4, 
-            emissiveMap: texx,
-            emissive: 0xFFFFFF,
-            emissiveIntensity: 0.5,
+            //emissiveMap: texx,
+            //emissive: 0xFFFFFF,
+            //emissiveIntensity: 1,
             map: texx,
         } );
         const glassMat = new MeshPhysicalMaterial( 
@@ -63,7 +75,7 @@ export class GfxEngine{
                 side: 2
             } 
         );
-        const contentMat = new MeshBasicMaterial({map: contentTex})
+        //const contentMat = new MeshBasicMaterial({map: contentTex})
 
         if( USE_MESH_DEFORM_SHADER )
         {
@@ -94,12 +106,11 @@ export class GfxEngine{
 
         var sphere = new Mesh( sphereGeo, material );
         var orb = new Mesh( orbGeo, glassMat );
-        var plane = new Mesh(contentQuadGeo, contentMat )
-        //plane.position.set(0,0,10);
+        //var plane = new Mesh(contentQuadGeo, contentMat )
 
         this.scene.add( sphere );
         this.scene.add( orb );
-        this.scene.add( plane );
+        //this.scene.add( plane );
 
         const ambientLight = new AmbientLight( 0xcccccc, 0.3 );
         this.scene.add( ambientLight );
@@ -110,11 +121,36 @@ export class GfxEngine{
 
         this.renderer = new WebGLRenderer({antialias:true, canvas: this.canvas, alpha: true});
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
+        this.renderer.outputColorSpace = SRGBColorSpace;
+        //this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.toneMapping = ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 3.0;
 
         const render = () => {
             requestAnimationFrame( render );  
+
+            const time = this.clock.getElapsedTime();
+            const dt = this.clock.getDelta();
+
             if (material.userData.shader) {
                 material.userData.shader.uniforms.uTime.value += 0.01;
+            }
+
+            if(this.state == 1)
+            {
+                const t = (time - this.animStartTime) * ANIM_DT_RCP
+                if( t > 1) { 
+                    this.state = 0;
+                    this.animStartTime = 0;
+                } else {
+                    
+                    ambientLight.intensity *= 1 - lerp(0, 1, t);
+                    directionalLight.intensity *= 1 - lerp(0, 1, t);
+                }
+            }
+            else if(this.state == 2)
+            {
+                //sphere.position.x = 0;
             }
 
             sphere.rotation.y += 0.003;
@@ -122,6 +158,15 @@ export class GfxEngine{
         }
 
         render();
+    }
+
+    animReset(){
+        this.state = 0;
+    }
+
+    animTrigger(){
+        this.animStartTime = this.clock.getElapsedTime();
+        this.state = 1;
     }
 
     resize(){
