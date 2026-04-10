@@ -1,9 +1,71 @@
-<!DOCTYPE html>
-<html>
-<body>
-
-<h1>Under Construction!</h1>
-<p> -- bill :) </p>
-
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style> /* default style to mitigate pop-in */
+      body{ 
+        height: 90%;
+        margin-top: 10%;
+        background-color: #242424;
+      } 
+      nav {
+          position: fixed;
+          height: 64px;
+          width: 100%;
+          top: 0;
+          left: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #1a1a1a;
+      }
+      nav a{
+          color: whitesmoke;
+          text-decoration: none;
+          /* font-size: normal;
+          font-weight: 800;
+          transform: scaleY(1.2);
+          letter-spacing: 0.4rem;
+          word-spacing: 1rem; */
+          opacity: 0;
+      }
+      #nav_title{
+        text-transform: uppercase;
+        transition: 
+          opacity 500ms ease-out,
+      }
+      nav a.visible{
+        opacity: 1;
+      }
+    </style>
+    <!-- <link rel="stylesheet" href="/styles/default.css" /> -->
+    <link rel="preload" href="/fonts/ZenDots-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="icon" type="image/png" href="/ball.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bderksen20.github.io</title>
+    <script type="module" crossorigin src="/assets/index-Bwg2K0ny.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CGWEq33Y.css">
+  </head>
+  <body>
+    <nav id="topnav">
+      <a href="/" id="nav_title"><span>Billy Derksen</span></a>
+      <div class="nav_links">
+        <a href="#" id="nav_about" data-route="about"><span>about</span></a>
+        <a href="#" id="nav_work" data-route="work"><span>work</span></a>
+        <!-- <a id="nav_projects"><span>projects</span></a> -->
+        <!-- <a id="nav_contact"><span>contact</span></a> -->
+        <a href="https://github.com/bderksen20" target="_blank" rel="noopener noreferrer" id="nav_github" class="nav_icon_link">
+          <img src="/images/github-icon.svg" alt="GitHub" class="nav_icon" />
+        </a>
+        <a href="https://www.linkedin.com/in/william-derksen-831828186/" target="_blank" rel="noopener noreferrer" id="nav_linkedin" class="nav_icon_link">
+          <img src="/images/linkedin-logo.png" alt="LinkedIn" class="nav_icon" />
+        </a>
+      </div>
+    </nav>
+    <!-- <div id="app"></div> -->
+     <div class="canvasbox">
+        <div class="overlay" id="overlay"></div>
+        <canvas id="three-canvas"></canvas>
+     </div>
+  </body>
 </html>
